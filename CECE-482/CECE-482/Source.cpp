@@ -6,6 +6,7 @@
 using namespace cv;
 
 /// Global variables
+/// Change
 
 Mat src, src_gray;
 Mat dst, detected_edges;
