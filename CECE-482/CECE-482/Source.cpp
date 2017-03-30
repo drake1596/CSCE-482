@@ -111,15 +111,15 @@ int main(int argc, char** argv)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/// Load an image (as a grayscale image)
+	//TODO:// PATH NEEDS TO BE CHANGED
 	String folderpath = "C:\\Users\\izaya\\Source\\Repos\\CSCE-482\\CECE-482\\data\\*.jpg";
 	std::vector<String> filenames;
 	cv::glob(folderpath, filenames);
 
 	for (size_t i = 0; i < filenames.size(); i++)
 	{
-		//Mat src = imread(filenames[i], CV_LOAD_IMAGE_GRAYSCALE);
+		Mat src = imread(filenames[i], CV_LOAD_IMAGE_GRAYSCALE);
 		
-
 		if (!src.data)
 		{
 			return -1;
@@ -128,13 +128,13 @@ int main(int argc, char** argv)
 		/// Create a matrix of the same type and size as src (for dst)
 		dst.create(src.size(), src.type());
 
-		//blur(src, detected_edges, Size(3, 3));
+		blur(src, detected_edges, Size(3, 3));
 
 		/// Canny detector
-		//Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size);
+		Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size);
 
 		/// Using Canny's output as a mask, we display our result
-		//dst = Scalar::all(0);
+		dst = Scalar::all(0);
 
 		//dst becomes the final image. Saves it here
 		src.copyTo(dst, detected_edges);
@@ -144,12 +144,14 @@ int main(int argc, char** argv)
 		String fn = filenames[i].substr(50, filenames[i].size() - 4);
 		//window_name = (char*)i;
 		//std::cout << fn << "\n";
-		//saves image to specified path. should be made relative, not absolute
+
+		//saves image to specified path. should be made relative, not absolute. 
 		imwrite("C:\\Users\\izaya\\Source\\Repos\\CSCE-482\\CECE-482\\sketches\\"+fn+"_sketch.jpg", dst);
 		//std::cout << "C:\\Users\\izaya\\Source\\Repos\\CSCE-482\\CECE-482\\sketches\\" + filenames[i] + "_sketch.jpg" << "\n";
 		
 		std::cout << "Finished sketching image C:\\Users\\izaya\\Source\\Repos\\CSCE-482\\CECE-482\\sketches\\" << filenames[i] << "_sketch.jpg" << "\n";
-
+		waitKey(0);
+		return 0;
 	}/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
