@@ -28,6 +28,7 @@ RNG rng(12345);
 
 /// Function header
 void thresh_callback(int, void*);
+void CannyThreshold(int, void*);
 
 /**
 * @function CannyThreshold
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
 	//arguments can be changed for the debug version (probably the version you;re using by doing the following:
 	//Right Click CECE-482 (NOT SOlution CECE-482) in the solution explorer -> properties -> Debugging ->command arguments
 	//the argument should be an image file. currently stored in the data file 1 directory up from where the arguments are accepted
-	//so, argument looks like ..\\data\Fig04.jpg or similar
+	//so, argument looks like ..\\data\Fig04.jpg or similar*/
 
 	//sets image to the file that was a command line argument
 	src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
@@ -71,6 +72,10 @@ int main(int argc, char** argv)
 	//createTrackbar("Kernel Size", window_name, &kernel_size, 20, CannyThreshold);
 
 	/// Show the image
+	for (int i = 1; i < 31; i = i + 2)
+	{
+		GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
+	}
 	CannyThreshold(0, 0);
 
 	/// Wait until user exit program by pressing a key*/
@@ -81,7 +86,7 @@ int main(int argc, char** argv)
 	//WARNING: Works very slowly. 
 
 	/// Load source image and convert it to gray
-	src = imread(argv[1], 1);
+	src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 	if (!src.data)
 	{
 		std::cout << "Image" << argv[1] << " not found! \n";
@@ -94,14 +99,14 @@ int main(int argc, char** argv)
 
 	/// Create Window
 	char* source_window = "Source";
-	namedWindow(source_window, CV_WINDOW_AUTOSIZE);
+	namedWindow(source_window, CV_WINDOW_FULLSCREEN);
 	imshow(source_window, src);
 
 	createTrackbar(" Canny thresh:", "Source", &thresh, max_thresh, thresh_callback);
 	thresh_callback(0, 0);
 
 	waitKey(0);
-	return(0);*/
+	return(0);/**/
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -112,6 +117,7 @@ int main(int argc, char** argv)
 
 	/// Load an image (as a grayscale image)
 	//TODO:// PATH NEEDS TO BE CHANGED
+	/* /
 	String folderpath = "C:\\Users\\izaya\\Source\\Repos\\CSCE-482\\CECE-482\\data\\*.jpg";
 	std::vector<String> filenames;
 	cv::glob(folderpath, filenames);
@@ -155,7 +161,7 @@ int main(int argc, char** argv)
 	}/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
+	*/
 	waitKey(0);
 	return 0;
 }
@@ -165,7 +171,8 @@ int main(int argc, char** argv)
 void CannyThreshold(int, void*)
 {
 	/// Reduce noise with a kernel 3x3
-	blur(src, detected_edges, Size(3, 3));
+	//blur(src, detected_edges, Size(3, 3));
+	//blur(src, detected_edges, Size(5, 5));
 
 	/// Canny detector
 	Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size);
@@ -201,6 +208,6 @@ void thresh_callback(int, void*)
 	}
 
 	/// Show in a window
-	namedWindow("Contours", CV_WINDOW_AUTOSIZE);
+	namedWindow("Contours", CV_WINDOW_FULLSCREEN);
 	imshow("Contours", drawing);
 }
