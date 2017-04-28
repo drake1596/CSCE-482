@@ -250,68 +250,69 @@ int main(int argc, char** argv)
 	////the argument should be an image file. currently stored in the data file 1 directory up from where the arguments are accepted
 	////so, argument looks like ..\\data\Fig04.jpg or similar*/
 
-	////sets image to the file that was a command line argument
-	///*src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+	//sets image to the file that was a command line argument
+	src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 
-	////return failure if image cannot be loaded
+	//return failure if image cannot be loaded
+	if (!src.data)
+	{
+		std::cout << "Image" << argv[1] << " not found! \n";
+		return -1;
+	}
+
+	/// Convert the image to grayscale -> no longer necessary as image should be loaded as a grayscale image
+	//cvtColor(src, src_gray, CV_BGR2GRAY);
+
+	/// Create a window
+	window_name = argv[1];
+	namedWindow(window_name, CV_WINDOW_KEEPRATIO);
+
+	/// Create a Trackbar for user to enter threshold
+	createTrackbar("Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold);
+
+	createTrackbar("Ratio:", window_name, &ratio, 10, CannyThreshold);
+
+	//createTrackbar("Kernel Size", window_name, &kernel_size, 20, CannyThreshold);
+
+	/// Show the image
+	for (int i = 1; i < 31; i = i + 2)
+	{
+		GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
+	}
+
+	CannyThreshold(0, 0);
+
+	/// Wait until user exit program by pressing a key
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///*Single Contour Implementation
+	////WARNING: Works very slowly. 
+
+	///// Load source image and convert it to gray
+	//src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 	//if (!src.data)
 	//{
 	//	std::cout << "Image" << argv[1] << " not found! \n";
 	//	return -1;
 	//}
 
-	///// Convert the image to grayscale -> no longer necessary as image should be loaded as a grayscale image
-	////cvtColor(src, src_gray, CV_BGR2GRAY);
+	///// Convert image to gray and blur it
+	//cvtColor(src, src_gray, CV_BGR2GRAY);
+	//blur(src_gray, src_gray, Size(3, 3));
 
-	///// Create a window
-	//window_name = argv[1];
-	//namedWindow(window_name, CV_WINDOW_KEEPRATIO);
+	///// Create Window
+	//char* source_window = "Source";
+	//namedWindow(source_window, CV_WINDOW_FULLSCREEN);
+	//imshow(source_window, src);
 
-	///// Create a Trackbar for user to enter threshold
-	//createTrackbar("Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold);
+	//createTrackbar(" Canny thresh:", "Source", &thresh, max_thresh, thresh_callback);
+	//thresh_callback(0, 0);
 
-	//createTrackbar("Ratio:", window_name, &ratio, 10, CannyThreshold);
-
-	////createTrackbar("Kernel Size", window_name, &kernel_size, 20, CannyThreshold);
-
-	///// Show the image
-	//for (int i = 1; i < 31; i = i + 2)
-	//{
-	//	GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
-	//}
-	//CannyThreshold(0, 0);*/
-
-	///// Wait until user exit program by pressing a key
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/////*Single Contour Implementation
-	//////WARNING: Works very slowly. 
-
-	/////// Load source image and convert it to gray
-	////src = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
-	////if (!src.data)
-	////{
-	////	std::cout << "Image" << argv[1] << " not found! \n";
-	////	return -1;
-	////}
-
-	/////// Convert image to gray and blur it
-	////cvtColor(src, src_gray, CV_BGR2GRAY);
-	////blur(src_gray, src_gray, Size(3, 3));
-
-	/////// Create Window
-	////char* source_window = "Source";
-	////namedWindow(source_window, CV_WINDOW_FULLSCREEN);
-	////imshow(source_window, src);
-
-	////createTrackbar(" Canny thresh:", "Source", &thresh, max_thresh, thresh_callback);
-	////thresh_callback(0, 0);
-
-	////waitKey(0);
-	////return(0);
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//waitKey(0);
+	//return(0);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//Multi(directory) sketch implementation
 	//Directory pointed at by folderpath. Currently hardcoded. should be changed 
@@ -320,74 +321,50 @@ int main(int argc, char** argv)
 
 	/// Load an image (as a grayscale image)
 	//TODO:// PATH NEEDS TO BE CHANGED
-	
-	String folderpath = "..\\data\\*.jpg";
-	std::vector<String> filenames;
-	cv::glob(folderpath, filenames);
-	std::cout << filenames.size() << " images have been loaded! \n";
-	namedWindow(window_name, WINDOW_KEEPRATIO);
+	//
+	//String folderpath = "..\\data\\*.jpg";
+	//std::vector<String> filenames;
+	//cv::glob(folderpath, filenames);
+	//std::cout << filenames.size() << " images have been loaded! \n";
+	//namedWindow(window_name, WINDOW_KEEPRATIO);
 
-	for (size_t i = 0; i < 1/*filenames.size()*/; i++)
-	{
-		Mat src = imread(filenames[i], CV_LOAD_IMAGE_GRAYSCALE);
-		std::cout << "Loaded image " << filenames[i] << "\n";
-		
-		if (!src.data)
-		{
-			std::cout << "Source File "<< filenames[i]<<" is null \n";
-			return -1;
-		}
+	//for (size_t i = 0; i < 1/*filenames.size()*/; i++)
+	//{
+	//	Mat src = imread(filenames[i], CV_LOAD_IMAGE_GRAYSCALE);
+	//	std::cout << "Loaded image " << filenames[i] << "\n";
+	//	
+	//	if (!src.data)
+	//	{
+	//		std::cout << "Source File "<< filenames[i]<<" is null \n";
+	//		return -1;
+	//	}
 
-		window_name = argv[1];
-		namedWindow(window_name, CV_WINDOW_KEEPRATIO);
+	//	window_name = argv[1];
+	//	namedWindow(window_name, CV_WINDOW_KEEPRATIO);
 
-		//Creates trackbars to manipulate variables in the Canny algorithm
-		//createTrackbar("Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold);
-		//createTrackbar("Ratio:", window_name, &ratio, 10, CannyThreshold);
+	//	//Creates trackbars to manipulate variables in the Canny algorithm
+	//	createTrackbar("Min Threshold:", window_name, &lowThreshold, max_lowThreshold, CannyThreshold);
+	//	createTrackbar("Ratio:", window_name, &ratio, 10, CannyThreshold);
 
-		for (int i = 1; i < 31; i = i + 2)
-		{
-			GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
-		}
+	//	for (int i = 1; i < 31; i = i + 2)
+	//	{
+	//		GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
+	//	}
 
-		CannyThreshold(0, 0);
-
-		/// Create a matrix of the same type and size as src (for dst)
-		//dst.create(src.size(), src.type());
-
-		//Noise reduction
-		//blur(src, detected_edges, Size(3, 3));
-
-		/// Canny detector
-		//Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size);
-
-		/// Using Canny's output as a mask, we display our result
-		//dst = Scalar::all(0);
-
-		//dst becomes the final image. Saves it here
-		//src.copyTo(dst, detected_edges);
-
-			
-
-		//CannyThreshold(0, 0);
-
-		//shows sketched image w/ trackbar sliders
-		//imshow(window_name, dst);
-
-		//provides part of the name of the original image so that the output iamge can be identified
-		String fn = filenames[i].substr(50, filenames[i].size() - 4);
-		//window_name = (char*)i;
-		
-		std::cout << "Finished sketching image ..\\CSCE-482\\CECE-482\\sketches\\" << filenames[i] << "_sketch.jpg" << "\n";
-		waitKey(0);
-		//saves image to specified path. 
-		imwrite("..\\sketches\\" + fn + "_sketch.jpg", dst);
-		
-		//return 0;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+	//	//provides part of the name of the original image so that the output iamge can be identified
+	//	String fn = filenames[i].substr(50, filenames[i].size() - 4);
+	//	//window_name = (char*)i;
+	//	
+	//	std::cout << "Finished sketching image ..\\CSCE-482\\CECE-482\\sketches\\" << filenames[i] << "_sketch.jpg" << "\n";
+	//	waitKey(0);
+	//	//saves image to specified path. 
+	//	imwrite("..\\sketches\\" + fn + "_sketch.jpg", dst);
+	//	
+	//	//return 0;
+	//}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	
 	waitKey(0);
 	return 0;
@@ -395,11 +372,24 @@ int main(int argc, char** argv)
 
 /*Canny edge detection for a single image file. */
 
-void CannyThreshold(int, void*)
+Mat CannyThreshold(int, void*, String filepath)
 {
+	Mat dst, detected_edges, src;
+	int edgeThresh = 1;
+	int lowThreshold = 100;
+	int const max_lowThreshold = 100;
+	int ratio;// = 2;
+	int kernel_size = 3;
+	//src = image chosen by user. should be passed as parameter
+	src = imread(filepath, CV_LOAD_IMAGE_GRAYSCALE);
+		
 	/// Reduce noise with a kernel 3x3
-	//blur(src, detected_edges, Size(3, 3));
-	GaussianBlur(src, detected_edges, Size(7, 7), 0, 0);
+	blur(src, detected_edges, Size(3, 3));
+
+		//for (int i = 1; i < 31; i = i + 2)
+		//{
+			//GaussianBlur(src, detected_edges, Size(i, i), 0, 0);
+		//}
 
 	/// Canny detector
 	Canny(detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size);
@@ -409,8 +399,9 @@ void CannyThreshold(int, void*)
 
 	//dst becomes the final image. Saves it here
 	src.copyTo(dst, detected_edges);
-	imshow(window_name, dst);
-	std::cout << "Finished sketching image \n";
+	//imshow(window_name, dst);
+	//std::cout << "Finished sketching image \n";
+	return dst; //image dst;
 }
 
 /** @function thresh_callback
